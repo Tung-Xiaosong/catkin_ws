@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="project" default="showpath"/>
+
+    <node pkg="showpath" type="showpath_node" name="showpath"/>
+    <node pkg="rviz" type="rviz" name="$(arg project)_rviz" args="-d $(find showpath)/rviz/showpath.rviz"/>
+</launch>

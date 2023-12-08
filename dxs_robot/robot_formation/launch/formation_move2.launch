@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="carrot_to_robot1imu_link" args="-2 0 0 0 0 0 robot1/imu_link carrot"/>
+    <!--tf2_ros发布静态变换不用加频率，tf发布args后需要加上频率-->
+    <node pkg="robot_formation" type="move_node" name="move_node" output="screen"/>
+</launch>

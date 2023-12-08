@@ -1,0 +1,15 @@
+# submaps
+在Cartographer SLAM中，submap是一个重要的概念，它代表了Cartographer对环境的一个局部建图结果。submap通常是一个二维栅格地图或三维点云地图，用于表示Cartographer在某个时间段内对环境的建图结果。submap的大小和形状可以根据需要进行调整，以适应不同的环境和应用场景。
+
+在RViz中，你可以使用Cartographer提供的插件来可视化submap。具体来说，你可以通过将`/submap_list`话题添加到RViz的`Displays`面板中，来显示当前Cartographer节点的submap列表。在submap列表中，你可以选择要显示的submap，并将其添加到RViz中。这样，就可以在RViz中看到Cartographer的子图像素图和点云地图了。
+
+在RViz中，submap通常以灰度图或者彩色图的形式显示，用于表示Cartographer在某个时间段内的建图结果。你可以使用RViz的`Displays`面板中的工具来调整submap的显示方式和参数，以更好地查看和分析Cartographer的建图结果。
+
+# Trajectories
+在Cartographer SLAM中，Trajectory代表了Cartographer对机器人移动轨迹的一个估计结果。Trajectory通常是一个由位置和姿态构成的时间序列，用于表示Cartographer对机器人在环境中的运动轨迹和姿态变化的估计结果。
+
+在RViz中，你可以使用Cartographer提供的插件来可视化Trajectory。具体来说，你可以通过将`/trajectory`话题添加到RViz的`Displays`面板中，来显示当前Cartographer节点的Trajectory。在Trajectory中，你可以看到机器人在环境中的运动轨迹和姿态变化，以及Cartographer对机器人运动轨迹的估计结果。
+
+在RViz中，Trajectory通常以线条和箭头的形式显示，用于表示机器人在环境中的运动轨迹和姿态变化。你可以使用RViz的`Displays`面板中的工具来调整Trajectory的显示方式和参数，以更好地查看和分析Cartographer的运动轨迹估计结果。
+
+

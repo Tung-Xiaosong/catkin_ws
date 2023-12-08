@@ -1,0 +1,47 @@
+<!--
+  Copyright 2016 The Cartographer Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<launch>
+
+  <node name="cartographer_node" pkg="cartographer_ros"
+      type="cartographer_node" args="
+          -configuration_directory $(find robot_slam)/config
+          -configuration_basename 2d_slam.lua"
+      output="screen">
+      <!-- <remap from="scan" to="/scan" />
+      <remap from="imu" to="/imu_data" />
+      <remap from="odom" to="/odom" /> -->
+      <remap from="/points2" to="velodyne_points" /><!--velodyne_points前不能加/-->
+  </node>
+
+  <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
+      type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
+  
+</launch>
+
+<!--这是ROS中使用Cartographer进行SLAM（同时定位与建图）的配置文件中的一部分。具体来说，这段代码定义了两个节点：
+
+1. `cartographer_node`：该节点是Cartographer的主节点，负责处理传感器数据、进行地图构建和机器人定位等工作。其中的`-configuration_directory`参数指定了Cartographer的配置文件所在的路径，`-configuration_basename`参数指定了Cartographer的配置文件的文件名。
+
+2. `cartographer_occupancy_grid_node`：该节点是Cartographer的子节点，负责把Cartographer构建的地图转化为ROS中的`nav_msgs/OccupancyGrid`类型的消息。其中的`-resolution`参数指定了地图的分辨率，即每个栅格的大小。
+
+总之，这段代码的作用是在ROS中启动Cartographer并将其构建的地图转化为ROS消息。-->
+
+
+
+
+
+

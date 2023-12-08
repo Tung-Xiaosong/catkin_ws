@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<launch>
+	<!--gazebo-->
+	<include file="$(find robot_description)/launch/display_robot_gazebo.launch"/>
+	<!--cartographer-->
+	<include file="$(find robot_slam)/launch/cartographer.launch"/>
+	
+	<!--joy-->
+	<!--include file="$(find input_js_control)/launch/input_js_control.launch"/-->
+	<!--rviz-->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot_slam)/rviz/demo_2d.rviz" required="true" />	
+</launch>

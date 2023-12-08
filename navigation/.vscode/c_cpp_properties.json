@@ -1,0 +1,50 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/dxs/catkin_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/dxs/catkin_ws/src/navigation/amcl/include/**",
+        "/home/dxs/catkin_ws/src/navigation/base_local_planner/include/**",
+        "/home/dxs/catkin_ws/src/dxs_robot/dxs_tutorials/capture_picture/include/**",
+        "/home/dxs/catkin_ws/src/navigation/carrot_planner/include/**",
+        "/home/dxs/catkin_ws/src/navigation/clear_costmap_recovery/include/**",
+        "/home/dxs/catkin_ws/src/navigation/costmap_2d/include/**",
+        "/home/dxs/catkin_ws/src/navigation/dwa_local_planner/include/**",
+        "/home/dxs/catkin_ws/src/navigation/global_planner/include/**",
+        "/home/dxs/catkin_ws/src/SLAM/LIO-SAM/include/**",
+        "/home/dxs/catkin_ws/src/navigation/map_server/include/**",
+        "/home/dxs/catkin_ws/src/navigation/move_base/include/**",
+        "/home/dxs/catkin_ws/src/navigation/move_slow_and_clear/include/**",
+        "/home/dxs/catkin_ws/src/navigation/nav_core/include/**",
+        "/home/dxs/catkin_ws/src/dxs_robot/dxs_tutorials/nav_path/include/**",
+        "/home/dxs/catkin_ws/src/navigation/navfn/include/**",
+        "/home/dxs/catkin_ws/src/rviz_tool/path_rviz_plugin/include/**",
+        "/home/dxs/catkin_ws/src/rviz_tool/path_server/include/**",
+        "/home/dxs/catkin_ws/src/rviz_tool/record_path_planner/include/**",
+        "/home/dxs/catkin_ws/src/dxs_robot/robot_description/include/**",
+        "/home/dxs/catkin_ws/src/dxs_robot/robot_formation/include/**",
+        "/home/dxs/catkin_ws/src/dxs_robot/robot_navigation/include/**",
+        "/home/dxs/catkin_ws/src/dxs_robot/robot_recharge/include/**",
+        "/home/dxs/catkin_ws/src/dxs_robot/robot_slam/include/**",
+        "/home/dxs/catkin_ws/src/navigation/rotate_recovery/include/**",
+        "/home/dxs/catkin_ws/src/dxs_robot/dxs_tutorials/showpath/include/**",
+        "/home/dxs/catkin_ws/src/dxs_robot/dxs_tutorials/simple_goal/include/**",
+        "/home/dxs/catkin_ws/src/navigation/teb_local_planner/include/**",
+        "/home/dxs/catkin_ws/src/navigation/voxel_grid/include/**",
+        "/home/dxs/catkin_ws/src/yhs/yhs_bringup/yhs_can_control/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

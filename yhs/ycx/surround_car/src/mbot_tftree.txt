@@ -1,0 +1,37 @@
+//将mbot4建在雷达laser_link的tf树下
+#include<ros/ros.h>
+#include<tf/transform_broadcaster.h>
+#include <nav_msgs/Odometry.h>
+#include<geometry_msgs/Twist.h>
+#include <sensor_msgs/LaserScan.h>
+using namespace std;
+string mbot_name;
+
+void poseCallback(const nav_msgs::Odometry::ConstPtr& msg)
+{
+  //tf广播器
+  static tf::TransformBroadcaster br;
+  //根据小车当前位姿，设置相对于世界坐标系的坐标变换
+  tf::Transform transform;//定义一个tf关系
+  transform.setOrigin(tf::Vector3(msg->pose.pose.position.x,msg->pose.pose.position.y,0.0));//设置平移变换
+   double roll, pitch, yaw;
+    tf::Quaternion q;
+    tf::Quaternion quat;
+    tf::quaternionMsgToTF(msg->pose.pose.orientation, quat);
+    tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
+    q.setRPY(0.0, 0.0, yaw);
+    transform.setRotation(q);//设置旋转变换
+  br.sendTransform(tf::StampedTransform(transform,ros::Time::now(),"laser_link",mbot_name));
+  //发布小车4和雷达laser_link之间的tf关系
+}
+int main(int argc,char** argv)
+{
+  ros::init(argc,argv,"mbot_tftree");
+  mbot_name=argv[1];
+  ros::NodeHandle n;
+  //订阅小车的pose信息
+  ros::Subscriber sub=n.subscribe(mbot_name+"/odom",10,&poseCallback);
+  //订阅到pose信息后跳转到回调函数poseCallback
+  ros::spin();
+  return 0;
+}

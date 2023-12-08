@@ -1,0 +1,3 @@
+geometry_msgs/PoseStamped charge_point
+---
+int8 result

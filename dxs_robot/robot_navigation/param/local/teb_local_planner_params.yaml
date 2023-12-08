@@ -1,0 +1,110 @@
+TebLocalPlannerROS:
+
+ odom_topic: odom
+    
+ # Trajectory
+  
+ teb_autosize: True #优化期间允许改变轨迹的时域长度
+ dt_ref: 0.3 #局部路径规划的解析度,期望的轨迹时间分辨率
+ dt_hysteresis: 0.1 #允许改变的时域解析度的浮动 范围,根据当前时间分辨率自动调整大小的滞后现象,建议使用dt ref的10%。
+ max_samples: 500 #最大样本数
+ global_plan_overwrite_orientation: True #覆盖全局路径中局部路径点的朝向
+ allow_init_with_backwards_motion: False #允许在开始时想后退来执行轨迹
+ max_global_plan_lookahead_dist: 3.0 #考虑优化的全局计划子集的最大长度
+ global_plan_viapoint_sep: 0.0 #当“Global_plan_viapoint_sep”的值为 0 时，蓝色的局部路径比较靠近障碍物.当“Global_plan_viapoint_sep”的值为 0.1 时，蓝色的局部路径比较贴合绿色的全局路径.从全局计划中提取的每两个连续通过点之间的最小间隔
+ global_plan_prune_distance: 1
+ exact_arc_length: False
+ feasibility_check_no_poses: true #5
+ publish_feedback: False
+    
+ # Robot 机器人在rviz里的速度
+         
+ max_vel_x: 0.5
+ max_vel_x_backwards: 0.4 #后退最大线速度	
+ max_vel_y: 0 #y最大线速度
+ max_vel_theta: 1.5 #最大角速度
+ acc_lim_x: 1 #最大线加速度
+ acc_lim_theta: 2.0 #最大角加速度
+ min_turning_radius: 0.0 # diff-drive robot (can turn on place!)最小旋转半径
+
+ footprint_model:
+   type: "point"
+
+ # GoalTolerance
+    
+ xy_goal_tolerance: 0.01 #目标位置的允许距离误差
+ yaw_goal_tolerance: 0.01 #目标位置的允许角度误差
+ free_goal_vel: False #去除目标速度的约束
+ complete_global_plan: True
+    
+ # Obstacles
+    
+ min_obstacle_dist: 0.5 # This value must also include our robot radius, since footprint_model is set to "point".# 与障碍的最小期望距离,注意，teb_local_planner本身不考虑膨胀半径
+ inflation_dist: 0.5 #障碍物周围缓冲区(应大于min_obstacle_dist才能生效)
+ include_costmap_obstacles: True #应否考虑到局部costmap的障碍
+ costmap_obstacles_behind_robot_dist: 1.5 #考虑后面n米内的障碍物
+ obstacle_poses_affected: 15 #为了保持距离，每个障碍物位置都与轨道上最近的位置相连
+
+ dynamic_obstacle_inflation_dist: 0.6
+ include_dynamic_obstacles: True
+
+ costmap_converter_plugin: ""
+ costmap_converter_spin_thread: True
+ costmap_converter_rate: 5
+
+ # Optimization
+    
+ no_inner_iterations: 5
+ no_outer_iterations: 4
+ optimization_activate: True
+ optimization_verbose: False
+ penalty_epsilon: 0.1
+ obstacle_cost_exponent: 4
+ weight_max_vel_x: 2
+ weight_max_vel_theta: 1
+ weight_acc_lim_x: 1
+ weight_acc_lim_theta: 1
+ weight_kinematics_nh: 1000
+ weight_kinematics_forward_drive: 1 #值最大时，差速机器人不执行后退
+ weight_kinematics_turning_radius: 1
+ weight_optimaltime: 1 # must be > 0
+ weight_shortest_path: 0
+ weight_obstacle: 100
+ weight_inflation: 0.2
+ weight_dynamic_obstacle: 10
+ weight_dynamic_obstacle_inflation: 0.2
+ weight_viapoint: 1
+ weight_adapt_factor: 2
+
+ # Homotopy Class Planner
+
+ enable_homotopy_class_planning: True
+ enable_multithreading: True
+ max_number_classes: 4
+ selection_cost_hysteresis: 1.0
+ selection_prefer_initial_plan: 0.9
+ selection_obst_cost_scale: 100.0
+ selection_alternative_time_cost: False
+ 
+ roadmap_graph_no_samples: 15
+ roadmap_graph_area_width: 5
+ roadmap_graph_area_length_scale: 1.0
+ h_signature_prescaler: 0.5
+ h_signature_threshold: 0.1
+ obstacle_heading_threshold: 0.45
+ switching_blocking_period: 0.0
+ viapoints_all_candidates: True
+ delete_detours_backwards: True
+ max_ratio_detours_duration_best_duration: 3.0
+ visualize_hc_graph: False
+ visualize_with_time_as_z_axis_scale: False
+
+# Recovery
+ 
+ shrink_horizon_backup: True
+ shrink_horizon_min_duration: 10
+ oscillation_recovery: True
+ oscillation_v_eps: 0.1
+ oscillation_omega_eps: 0.1
+ oscillation_recovery_min_duration: 10
+ oscillation_filter_duration: 10

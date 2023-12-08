@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<robot name="arm_mbot2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find surround_car)/urdf/xacro/gazebo/mbot_multi_base_gazebo.xacro" />
+
+    <xacro:mbot_multi_base_gazebo robot_name="mbot2"/><!--*****************************-->
+
+</robot>

@@ -1,0 +1,24 @@
+<launch>
+  <node pkg="move_base" type="move_base" respawn="true" name="move_base" output="screen" clear_params="true">
+  
+    <rosparam file="$(find robot_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find robot_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find robot_navigation)/param/local/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find robot_navigation)/param/global/global_costmap_params.yaml" command="load" />
+    
+     <rosparam file="$(find yhs_nav)/param/nav/teb_local_planner_params.yaml" command="load" />
+
+     <param name="base_global_planner" value="global_planner/GlobalPlanner"/> 
+     <param name="planner_frequency" value="2.0" />
+     <param name="planner_patience" value="10.0" />
+
+     <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+     <param name="controller_frequency" value="15.0" />
+     <param name="controller_patience" value="15.0" />
+
+     <remap from="/move_base/TebLocalPlannerROS/goal" to="/move_base_simple/goal" />
+     <remap from="/move_base/TebLocalPlannerROS/recorded_path" to="/recorded_path" />
+     <remap from="/move_base/TebLocalPlannerROS/type" to="/type" />
+
+  </node>
+</launch>

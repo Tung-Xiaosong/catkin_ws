@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<launch>
+	<!--gazebo-->
+	<include file="$(find mbot_description)/launch/gazebo/display_mbot_gazebo.launch"/>
+	<!--cartographer-->
+	<include file="$(find mbot_description)/launch/cartographer.launch"/>
+	<!--joy-->
+	<!--include file="$(find input_js_control)/launch/input_js_control.launch"/-->
+	<!--rviz-->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find mbot_description)/config/cartographer.rviz" required="true" />	
+</launch>

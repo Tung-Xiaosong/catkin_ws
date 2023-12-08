@@ -1,0 +1,16 @@
+global_costmap:
+   global_frame: map
+   robot_base_frame: base_footprint
+   update_frequency: 1.0 #全局代价地图更新频率1hz
+   publish_frequency: 0.5 #发布频率
+   static_map: true
+   transform_tolerance: 0.5 #tf转换关系时间差
+   plugins: #加载层,膨胀层
+     - {name: static_layer,            type: "costmap_2d::StaticLayer"}
+     - {name: obstacle_layer,          type: "costmap_2d::VoxelLayer"}
+     - {name: inflation_layer,         type: "costmap_2d::InflationLayer"}
+   inflation_layer:
+     enabled: true
+     cost_scaling_factor:  5.0  # exponential rate at which the obstacle cost drops off (default: 10)
+     inflation_radius:     0.2  # max. distance from an obstacle at which costs are incurred for planning paths.
+

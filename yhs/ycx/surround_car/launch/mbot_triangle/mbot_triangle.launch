@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--创建世界坐标,发布四个机器人的tf树-->
+<launch>
+ 
+<!--将mbot4_base_link建立在laser_link的tf树下-->
+<!--node pkg="surround_car" type="mbot_tftree_node" args="/mbot4_base_link" name="mbot4_tftree_node"/-->
+
+<!--打开turtle_tftree_node节点创建tmbot2和word之间的tf关系-->
+<!--node pkg="surround_car" type="mbot_tftree_node" args="/mbot2" name="mbot2_tftree_node"/-->
+<!--打开turtle_tftree_node节点创建mbot3和word之间的tf关系-->
+<!--node pkg="surround_car" type="mbot_tftree_node" args="/mbot3" name="mbot3_tftree_node"/-->
+<!--打开turtle_tftree_node节点创建mbot4和word之间的tf关系-->
+<!--node pkg="surround_car" type="mbot_tftree_node" args="/mbot4" name="mbot4_tftree_node"/-->
+
+<!--打开mbot_formation_node节点创建carrot1,2,和laser_link之间的tf关系--><!--将固定坐标建在mbot1下-->
+<node pkg="surround_car" type="mbot_formation_node" name="mbot_formation_node"/>
+
+<!--打开mbot_traing_node节点给两个围捕机器人速度,跟随mbot1-->
+<node pkg="surround_car" type="mbot_traing_node" name="mbot_traing_node"/>
+
+<!--启动雷达小车跟随运动的节点-->
+<node pkg="surround_car" type="mbot_control_node" name="mbot_control_node" output="screen"/>
+</launch>

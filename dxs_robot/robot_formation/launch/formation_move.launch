@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="robot_formation" type="formation_node" name="formation_node" output="screen"/>
+    <node pkg="robot_formation" type="move_node" name="move_node" output="screen"/>
+</launch>

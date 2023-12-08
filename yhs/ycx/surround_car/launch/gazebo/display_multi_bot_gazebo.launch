@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--发布四个机器人模型tf树,打开gazebo-->
+<launch>
+    <!-- 设置launch文件的参数 -->
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+
+    <!-- 运行gazebo仿真环境 -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+        <arg name="headless" value="$(arg headless)"/>
+    </include>
+
+    <!-- 加载机器人模型描述参数 (多个机器人)-->
+    <param name="mbot1/robot_description" command="$(find xacro)/xacro --inorder '$(find surround_car)/urdf/xacro/gazebo/mbot1_multi_gazebo.xacro'" /><!--mbot1/robot_description--> 
+
+    <param name="mbot2/robot_description" command="$(find xacro)/xacro --inorder '$(find surround_car)/urdf/xacro/gazebo/mbot2_multi_gazebo.xacro'" /> 
+    
+    <param name="mbot3/robot_description" command="$(find xacro)/xacro --inorder '$(find surround_car)/urdf/xacro/gazebo/mbot3_multi_gazebo.xacro'" /> 
+    
+    <param name="mbot4/robot_description" command="$(find xacro)/xacro --inorder '$(find surround_car)/urdf/xacro/gazebo/mbot4_multi_gazebo.xacro'" /> 
+    <!-- 运行joint_state_publisher节点，发布机器人的关节状态  -->
+<group ns="mbot1">
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+    <!-- 运行robot_state_publisher节点，发布tf  -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        <param name="publish_frequency" type="double" value="50.0" />
+    </node>
+</group>
+<!--*************************************************-->
+<group ns="mbot2">
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+    <!-- 运行robot_state_publisher节点，发布tf  -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        <param name="publish_frequency" type="double" value="50.0" />
+    </node>
+</group>
+<!--*************************************************-->
+<group ns="mbot3">
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+    <!-- 运行robot_state_publisher节点，发布tf  -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        <param name="publish_frequency" type="double" value="50.0" />
+    </node>
+</group>
+<!--*************************************************-->
+<group ns="mbot4">
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+    <!-- 运行robot_state_publisher节点，发布tf  -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        <param name="publish_frequency" type="double" value="50.0" />
+    </node>
+</group>
+    <!-- 在gazebo中加载机器人模型,并给出了各个机器人在gazebo中的初始位置坐标-->
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model mbot1 -param mbot1/robot_description -x -1"/><!--mbot1/robot_description-->
+                                                                                                                      <!--在rviz中修改robot_description以获取不同机器人的模型-->
+    <node name="urdf_spawner_1" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model mbot2 -param mbot2/robot_description -y -1"/>
+                                                                                                                      <!--如这里的mbot2/robot_description-->
+    <node name="urdf_spawner_2" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model mbot3 -param mbot3/robot_description -y 1"/>
+    
+    <node name="urdf_spawner_3" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model mbot4 -param mbot4/robot_description -x 1"/>
+     
+<node pkg="tf" type="static_transform_publisher" name="world_to_mbot1" args="0 0 0 0 0 0 /world mbot1/odom   10" />
+
+<node pkg="tf" type="static_transform_publisher" name="world_to_mbot2" args="0 0 0 0 0 0 /world mbot2/odom   10" />
+
+<node pkg="tf" type="static_transform_publisher" name="world_to_mbot3" args="0 0 0 0 0 0 /world mbot3/odom   10" />
+
+<node pkg="tf" type="static_transform_publisher" name="world_to_mbot4" args="0 0 0 0 0 0 /world mbot4/odom   10" />
+</launch>

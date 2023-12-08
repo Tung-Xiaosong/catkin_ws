@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+	<!--gazebo-->
+	<include file="$(find robot_description)/launch/display_robot_gazebo.launch"/>
+	<!--map_server-->
+	<include file="$(find robot_navigation)/launch/map_server.launch"/>
+	<!--move_base-->
+	<include file="$(find robot_navigation)/launch/move_base.launch"/>
+	<!--amcl-->
+	<include file="$(find robot_navigation)/launch/amcl.launch"/>
+
+	<!--rviz-->
+  	<!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot_navigation)/rviz/navigation.rviz"/> -->
+
+</launch>

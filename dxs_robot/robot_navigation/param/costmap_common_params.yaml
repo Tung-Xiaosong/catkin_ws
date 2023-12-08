@@ -1,0 +1,65 @@
+max_obstacle_height: 0.80 #障碍物最大高度,不能比二维激光雷达低 # assume something like an arm is mounted on top of the robot
+
+# Obstacle Cost Shaping (http://wiki.ros.org/costmap_2d/hydro/inflation)
+robot_radius: 0.20 #机器人半径,不规则的机器人用下面footprint # distance a circular robot should be clear of the obstacle 
+#footprint: [[0.3, 0.3], [0.3, -0.3], [-0.3, 0.3], [-0.3, -0.3]]  # if the robot is not circular #机器人的外观轮廓
+
+map_type: voxel 
+#map_type: costmap
+obstacle_layer: #障碍物层
+#Global Filtering Parameters
+  max_obstacle_height: 0.8 #小于等于全局障碍物高度
+  obstacle_range: 3.0 #障碍物范围3m
+  raytrace_range: 3.0
+#ObstacleCostmapPlugin 
+  track_unknown_space:  false    #true needed for disabling global path planning through unknown space
+  footprint_clearing_enabled: false
+#VoxelCostmapPlugin 
+  origin_z: 0 #(double, default: 0.0) z轴起始高度
+  z_resolution: 0.1 #(double, default: 0.2) 分辨率0.1m 
+  z_voxels: 20 #(int, default: 10) 20格
+  unknown_threshold: 0 #(int, default: ~<name>/z_voxels)
+  mark_threshold: 0 #(int, default: 0)
+  publish_voxel_map: false #(bool, default: false)
+  footprint_clearing_enabled: true #(bool, default: true)
+  
+  combination_method: 1
+  enabled: true  
+
+#Sensor management parameters  
+  observation_sources: scan #ultrasonic bump 输入源
+  bump:
+    data_type: PointCloud2
+    topic: /kinect_camera/depth/points
+    sensor_frame: kinect_frame_optical
+    observation_persistence: 0
+    expected_update_rate: 0 #(double, default: 0.0)
+    marking: true
+    clearing: true
+    min_obstacle_height: 0.1
+    max_obstacle_height: 0.8
+    obstacle_range: 4
+    raytrace_range: 4
+    inf_is_valid: false 
+  # for debugging only, let's you see the entire voxel grid
+  
+  scan:
+    data_type: LaserScan
+    topic: scan
+    sensor_frame: laser_link
+    observation_persistence: 0
+    expected_update_rate: 0 #(double, default: 0.0)
+    marking: true #扫到临时障碍物会记录
+    clearing: true #清除已消失的障碍物
+    min_obstacle_height: 0.1 #深度相机扫描障碍物最小高度,相机会扫描到地面
+    max_obstacle_height: 0.8
+    obstacle_range: 4.0
+    raytrace_range : 4.0
+    inf_is_valid: false
+
+#cost_scaling_factor and inflation_radius were now moved to the inflation_layer ns
+static_layer:
+  enabled: true
+
+#全局和本地代价地图共用的一些参数配置  
+

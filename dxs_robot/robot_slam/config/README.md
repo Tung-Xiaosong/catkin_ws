@@ -1,0 +1,4 @@
+# *.lua
+cartographer算法是一个非常通用和适用于不同平台的开放框架算法，支持多种配置与工作模式。其配置文件由*.lua书写并放在路径cartographer_ros/configuration_files/内。
+
+cartographer算法的配置参数分为cartographer_ros接口层参数和cartographer核心库参数，而核心库参数又分为局部建图参数和全局建图参数。

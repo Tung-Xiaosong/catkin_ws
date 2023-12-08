@@ -1,0 +1,17 @@
+<!-- pbstream的地址与名称 -->
+<arg name="load_state_filename" default="$(env HOME)/catkin_ws/src/dxs_robot/robot_navigation/maps/Museum-pbstream.pbstream"/>
+
+<!-- 使用bag的时间戳 -->
+<!-- <param name="/use_sim_time" value="true" /> -->
+<!--pure localization-->
+<node name="cartographer_node" pkg="cartographer_ros"
+    type="cartographer_node" args="
+        -configuration_directory $(find robot_slam)/config
+        -configuration_basename 2d_pure_localization.lua
+        -load_state_filename $(arg load_state_filename)"
+    output="screen">
+    <!--remap from="points2" to="rslidar_points" /-->
+    <remap from="scan" to="scan" />
+    <remap from="odom" to="odom" />
+    <remap from="imu" to="imu" />
+</node>

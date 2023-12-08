@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot name="mbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="$(find robot_description)/xacro/base/robot_base_gazebo.xacro" />
+    <xacro:include filename="$(find robot_description)/xacro/sensors/camera_gazebo.xacro" />
+    <!-- VLP-16 -->
+    <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro"/>
+    <VLP-16 parent="base_link" name="velodyne" topic="/velodyne_points" hz="10" samples="1024" gpu="false" lasers="16" max_range="100">
+        <origin xyz="0 0 0.2" rpy="0 0 0" />
+    </VLP-16>
+
+    <xacro:mbot_base_gazebo robot_name=""/>
+    <xacro:usb_camera prefix="camera"/>
+
+    <xacro:property name="camera_offset_x" value="0.2" />
+    <xacro:property name="camera_offset_y" value="0" />
+    <xacro:property name="camera_offset_z" value="0.04" />
+
+    <!-- Camera -->
+    <joint name="camera_joint" type="fixed">
+        <origin xyz="${camera_offset_x} ${camera_offset_y} ${camera_offset_z}" rpy="0 0 0" />
+        <parent link="base_link"/>
+        <child link="camera_link"/>
+    </joint>
+
+    <!--robot_base/-->
+
+</robot>

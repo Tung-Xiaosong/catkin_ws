@@ -1,0 +1,6 @@
+image: /home/dxs/catkin_ws/src/dxs_robot/robot_navigation/maps/Museum-pbstream.pgm
+resolution: 0.05
+origin: [-7.76746, -8.43128, 0.0]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
