@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="pcd_to_pgm" type="pcd_to_pgm_node" name="pcd_to_pgm" output="screen"/>
+
+</launch>
