@@ -16,6 +16,7 @@
         <arg name="use_sim_time" value="$(arg use_sim_time)"/>
         <arg name="headless" value="$(arg headless)"/>
         <arg name="world_name" value="$(arg world_name)" />
+        <remap from="tf" to="gazebo_tf"/><!--dxs add: stop publish gazebo odom tf-->
     </include>
 
     <!-- 加载机器人模型描述参数 -->
