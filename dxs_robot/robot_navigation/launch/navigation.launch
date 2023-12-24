@@ -3,6 +3,9 @@
 	<!--gazebo-->
 	<include file="$(find robot_description)/launch/display_robot_gazebo.launch"/>
 
+	<!--robot_pose_ekf-->
+	<include file="$(find robot_pose_ekf)/launch/robot_pose_ekf.launch"/>
+	
 	<!--map_server-->
 	<include file="$(find robot_navigation)/launch/map_server.launch"/>
 

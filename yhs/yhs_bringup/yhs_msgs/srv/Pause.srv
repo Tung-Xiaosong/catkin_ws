@@ -1,0 +1,7 @@
+std_msgs/Header header
+
+uint8 pause 
+
+---
+
+int8 result        

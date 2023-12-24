@@ -12,7 +12,9 @@
 
     <include file="$(find robot_pose_ekf)/launch/navigation.launch"/>
 
-    <include file="$(find lslidar_c16_decoder)/launch/lslidar_c16.launch"/>
+    <include file="$(find nvilidar_ros)/launch/lidar.launch"/>
+
+    <include file="$(find lidar_undistortion)/launch/lidar_undistortion_online.launch"/>
 
     <include file="$(find yocs_velocity_smoother)/launch/standalone.launch"/>
 

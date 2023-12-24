@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="scan_topic"  default="scan" /> <!--laser的topic名称，与自己的激光的topic相对应-->
+  <arg name="scan_topic"  default="/scan" /> <!--laser的topic名称，与自己的激光的topic相对应-->
   <arg name="base_frame"  default="base_footprint"/><!--机器人的坐标系-->
   <arg name="odom_frame"  default="odom"/><!--世界坐标-->
  

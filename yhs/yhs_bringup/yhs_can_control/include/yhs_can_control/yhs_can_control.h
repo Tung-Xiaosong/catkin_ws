@@ -1,29 +1,25 @@
-#ifndef __PIDCONTROL_NODE_H__
-#define __PIDCONTROL_NODE_H__
+#ifndef __CANCONTROL_NODE_H__
+#define __CANCONTROL_NODE_H__
 
 
 
 #include "ros/ros.h"
 #include "std_msgs/Int32.h"
-#include "std_msgs/UInt8.h"
-#include "std_msgs/String.h"
 #include "geometry_msgs/Twist.h"
 #include "tf/transform_broadcaster.h"
 #include "nav_msgs/Odometry.h"
 #include "sensor_msgs/Imu.h"
 #include "geometry_msgs/Twist.h"
-#include "yhs_can_msgs/ctrl_cmd.h"
-#include "yhs_can_msgs/ctrl_cmd_init_data.h"
-#include "yhs_can_msgs/io_cmd.h"
-#include "yhs_can_msgs/ctrl_fb.h"
-#include "yhs_can_msgs/lr_wheel_fb.h"
-#include "yhs_can_msgs/rr_wheel_fb.h"
-#include "yhs_can_msgs/io_fb.h"
-#include "yhs_can_msgs/odo_fb.h"
-#include "yhs_can_msgs/bms_Infor.h"
-#include "yhs_can_msgs/bms_flag_Infor.h"
-#include "yhs_can_msgs/Drive_MCUEcoder_fb.h"
-#include "yhs_can_msgs/Veh_Diag_fb.h"
+#include "yhs_msgs/ctrl_cmd.h"
+#include "yhs_msgs/io_cmd.h"
+#include "yhs_msgs/ctrl_fb.h"
+#include "yhs_msgs/l_wheel_fb.h"
+#include "yhs_msgs/r_wheel_fb.h"
+#include "yhs_msgs/io_fb.h"
+#include "yhs_msgs/free_ctrl_cmd.h"
+#include "yhs_msgs/bms_fb.h"
+#include "yhs_msgs/bms_flag_fb.h"
+#include "yhs_msgs/ChassisInfoFb.h"
 
 #include <net/if.h>
 #include <sys/ioctl.h>
@@ -54,50 +50,40 @@ private:
 	ros::NodeHandle nh_;
 
 	ros::Publisher ctrl_fb_pub_;
-	ros::Publisher cmd_pub_;
-	ros::Publisher lr_wheel_fb_pub_;
-	ros::Publisher rr_wheel_fb_pub_;
+	ros::Publisher l_wheel_fb_pub_;
+	ros::Publisher r_wheel_fb_pub_;
 	ros::Publisher io_fb_pub_;
-	ros::Publisher odo_fb_pub_;
-	ros::Publisher bms_Infor_pub_;
-	ros::Publisher bms_flag_Infor_pub_;
-	ros::Publisher Drive_MCUEcoder_fb_pub_;
-	ros::Publisher Veh_Diag_fb_pub_;
+	ros::Publisher bms_fb_pub_;
+	ros::Publisher bms_flag_fb_pub_;
+	ros::Publisher chassis_info_fb_pub_;
 	ros::Publisher odom_pub_;
 
 	ros::Subscriber ctrl_cmd_sub_;
 	ros::Subscriber io_cmd_sub_;
+	ros::Subscriber free_ctrl_cmd_sub_;
 
-	ros::Subscriber cmd_sub_;
-	ros::Subscriber imu_sub_;
-	ros::Subscriber cmd_init_data_sub_;
-	ros::Subscriber cmd_relay_sub_;
+  ros::Subscriber cmd_sub_;
+
+	boost::mutex cmd_mutex_;
 
 	std::string odomFrame_, baseFrame_;
 	bool tfUsed_;
 
-	boost::mutex cmd_mutex_;
-
 	int dev_handler_;
-	can_frame send_frames_[2];
-	can_frame recv_frames_[1];
+	can_frame recv_frames_;
 
-	double imu_roll_,imu_pitch_,imu_yaw_;
+	
 
+	void io_cmdCallBack(const yhs_msgs::io_cmd msg);
+	void ctrl_cmdCallBack(const yhs_msgs::ctrl_cmd msg);
+  void cmdCallBack(const geometry_msgs::Twist msg);
+	void free_ctrl_cmdCallBack(const yhs_msgs::free_ctrl_cmd msg);
 
-	void io_cmdCallBack(const yhs_can_msgs::io_cmd msg);
-	void imu_cmdCallBack(const sensor_msgs::Imu msg);
-	void ctrl_cmdCallBack(const yhs_can_msgs::ctrl_cmd msg);
-	void cmdCallBack(const geometry_msgs::Twist msg);
-	void ctrl_init_data_cmdCallBack(const yhs_can_msgs::ctrl_cmd_init_data msg);
-	void ctrl_relay_cmdCallBack(const std_msgs::UInt8 msg);
+	void odomPub(const float linear,const float angular);
 
-	int char2bits(char ch);
-	int hex2bytes(const char *hex, uint8_t *bytes, int size);
 
 	void recvData();
-
-	void odomPub(float velocity,float steering);
+	void sendData();
 
 };
 

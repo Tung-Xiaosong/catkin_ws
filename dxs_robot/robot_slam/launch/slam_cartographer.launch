@@ -3,6 +3,10 @@
 <launch>
 	<!--gazebo-->
 	<include file="$(find robot_description)/launch/display_robot_gazebo.launch"/>
+
+	<!--robot_pose_ekf-->
+	<include file="$(find robot_pose_ekf)/launch/robot_pose_ekf.launch"/>
+	
 	<!--cartographer-->
 	<include file="$(find robot_slam)/launch/cartographer.launch"/>
 	

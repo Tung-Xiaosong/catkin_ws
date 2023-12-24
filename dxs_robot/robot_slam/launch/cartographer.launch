@@ -21,9 +21,9 @@
           -configuration_directory $(find robot_slam)/config
           -configuration_basename 2d_slam.lua"
       output="screen">
-      <!-- <remap from="scan" to="/scan" />
+      <remap from="scan" to="/scan" />
       <remap from="imu" to="/imu_data" />
-      <remap from="odom" to="/odom" /> -->
+      <remap from="odom" to="/robot_pose_ekf/odom_combined" />
       <remap from="/points2" to="velodyne_points" /><!--velodyne_points前不能加/-->
   </node>
 

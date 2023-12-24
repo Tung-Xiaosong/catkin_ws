@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   std_msgs
   message_generation
-  yhs_can_msgs
+  yhs_msgs
 )
 
 #find_package(yhs_can_msgs REQUIRED)

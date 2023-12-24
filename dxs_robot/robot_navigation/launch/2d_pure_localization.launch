@@ -10,8 +10,8 @@
         -configuration_basename 2d_pure_localization.lua
         -load_state_filename $(arg load_state_filename)"
     output="screen">
-    <!--remap from="points2" to="rslidar_points" /-->
+    <remap from="points2" to="velodyne_points" />
     <remap from="scan" to="scan" />
-    <remap from="odom" to="odom" />
-    <remap from="imu" to="imu" />
+    <remap from="odom" to="/robot_pose_ekf/odom_combined" />
+    <remap from="imu" to="/imu_data" />
 </node>
