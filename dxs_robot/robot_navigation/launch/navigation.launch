@@ -4,7 +4,7 @@
 	<include file="$(find robot_description)/launch/display_robot_gazebo.launch"/>
 
 	<!--robot_pose_ekf-->
-	<include file="$(find robot_pose_ekf)/launch/robot_pose_ekf.launch"/>
+	<!-- <include file="$(find robot_pose_ekf)/launch/robot_pose_ekf.launch"/> -->
 	
 	<!--map_server-->
 	<include file="$(find robot_navigation)/launch/map_server.launch"/>
@@ -13,7 +13,7 @@
 	<include file="$(find robot_navigation)/launch/move_base.launch"/>
 
 	<!--amcl-->
-	<!-- <include file="$(find robot_navigation)/launch/amcl.launch"/> -->
+	<include file="$(find robot_navigation)/launch/amcl.launch"/>
 
 	<!--ndt-->
 	<!-- <include file="$(find ndt_localizer)/launch/ndt_localizer.launch"/> -->
