@@ -1,0 +1,8 @@
+# launch
+robot_omnidir_in_stage.launch 全向机器人在二维仿真器stage中的仿真
+robot_diff_drive_in_stage.launch 差速机器人仿真
+robot_diff_drive_in_stage_costmap_conversion.launch 差速机器人在costmap环境下仿真
+robot_carlike_in_stage.launch 类车仿真
+
+# scripts
+cmd_vel_to_ackermann_drive.py 将cmd_vel数据转换成阿克曼模型数据, 即将下发的线速度v 和 角速度omega 转换成线速度和舵机角度steering angle

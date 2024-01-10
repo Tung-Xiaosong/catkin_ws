@@ -80,7 +80,8 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "bit": "cpp"
+        "bit": "cpp",
+        "*.bak": "cpp"
     },
     "ros.distro": "noetic"
 }
