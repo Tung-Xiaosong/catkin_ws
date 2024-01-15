@@ -7,17 +7,20 @@ TebLocalPlannerROS:
  teb_autosize: True #优化期间允许改变轨迹的时域长度
  dt_ref: 0.3 #局部路径规划的解析度,期望的轨迹时间分辨率
  dt_hysteresis: 0.1 #允许改变的时域解析度的浮动 范围,根据当前时间分辨率自动调整大小的滞后现象,建议使用dt ref的10%。
+ follow_dt_ref: 0.45 #0.45
+ follow_dt_hysteresis: 0.15
  max_samples: 500 #最大样本数
  global_plan_overwrite_orientation: True #覆盖全局路径中局部路径点的朝向
  allow_init_with_backwards_motion: False #允许在开始时想后退来执行轨迹
  max_global_plan_lookahead_dist: 3.0 #考虑优化的全局计划子集的最大长度
- global_plan_viapoint_sep: 0.0 #当“Global_plan_viapoint_sep”的值为 0 时，蓝色的局部路径比较靠近障碍物.当“Global_plan_viapoint_sep”的值为 0.1 时，蓝色的局部路径比较贴合绿色的全局路径.从全局计划中提取的每两个连续通过点之间的最小间隔
+ global_plan_viapoint_sep: 0.0 #小于等于0.0禁用，大于0.0启用，从全局计划中提取的每两个连续通过点之间的最小间隔，值越小，局部路径越接近全局路径
  global_plan_prune_distance: 1
  exact_arc_length: False
  feasibility_check_no_poses: true #5
  publish_feedback: False
+ control_look_ahead_poses: 1    
     
- # Robot 机器人在rviz里的速度
+ # Robot 
          
  max_vel_x: 0.5
  max_vel_x_backwards: 0.4 #后退最大线速度	
@@ -27,13 +30,20 @@ TebLocalPlannerROS:
  acc_lim_theta: 2.0 #最大角加速度
  min_turning_radius: 0.0 # diff-drive robot (can turn on place!)最小旋转半径
 
- footprint_model:
-   type: "point"
-
+ footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
+  type: "point"
+  radius: 0.1
+  line_start: [-0.4, 0.0] # for type "line"
+  line_end: [0.4, 0.0] # for type "line"
+  front_offset: 0.4 # for type "two_circles"
+  front_radius: 0.2 # for type "two_circles"
+  rear_offset: 0.4 # for type "two_circles"
+  rear_radius: 0.2 # for type "two_circles"
+  
  # GoalTolerance
     
- xy_goal_tolerance: 0.01 #目标位置的允许距离误差
- yaw_goal_tolerance: 0.01 #目标位置的允许角度误差
+ xy_goal_tolerance: 0.05 #目标位置的允许距离误差
+ yaw_goal_tolerance: 0.05 #目标位置的允许角度误差
  free_goal_vel: False #去除目标速度的约束
  complete_global_plan: True
     
@@ -64,8 +74,8 @@ TebLocalPlannerROS:
  weight_max_vel_theta: 1
  weight_acc_lim_x: 1
  weight_acc_lim_theta: 1
- weight_kinematics_nh: 1000
- weight_kinematics_forward_drive: 1 #值最大时，差速机器人不执行后退
+ weight_kinematics_nh: 1000 #对非完整机器人的约束，值越小惩罚越小，对于完整约束机器人，会赋予Y轴速度
+ weight_kinematics_forward_drive: 1 #值较大时，差速机器人不执行后退
  weight_kinematics_turning_radius: 1
  weight_optimaltime: 1 # must be > 0
  weight_shortest_path: 0
@@ -73,7 +83,7 @@ TebLocalPlannerROS:
  weight_inflation: 0.2
  weight_dynamic_obstacle: 10
  weight_dynamic_obstacle_inflation: 0.2
- weight_viapoint: 1
+ weight_viapoint: 1 #via point权重
  weight_adapt_factor: 2
 
  # Homotopy Class Planner

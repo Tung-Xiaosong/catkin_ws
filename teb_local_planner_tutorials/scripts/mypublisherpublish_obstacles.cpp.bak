@@ -1,0 +1,75 @@
+#include <ros/ros.h>
+#include <costmap_converter/ObstacleArrayMsg.h>
+#include <costmap_converter/ObstacleMsg.h>
+#include <geometry_msgs/PolygonStamped.h>
+#include <geometry_msgs/Point32.h>
+#include <cmath>
+
+void publishObstacleMsg() {
+    ros::init(argc, argv, "test_obstacle_msg");
+
+    ros::NodeHandle nh;
+    ros::Publisher pub = nh.advertise<costmap_converter::ObstacleArrayMsg>("/test_optim_node/obstacles", 1);
+
+    costmap_converter::ObstacleArrayMsg obstacleMsg;
+    obstacleMsg.header.stamp = ros::Time::now();
+    obstacleMsg.header.frame_id = "odom"; // CHANGE HERE: odom/map
+
+    // Add point obstacle
+    obstacleMsg.obstacles.push_back(costmap_converter::ObstacleMsg());
+    obstacleMsg.obstacles[0].id = 0;
+    obstacleMsg.obstacles[0].polygon.points.push_back(geometry_msgs::Point32());
+    obstacleMsg.obstacles[0].polygon.points[0].x = 1.5;
+    obstacleMsg.obstacles[0].polygon.points[0].y = 0;
+    obstacleMsg.obstacles[0].polygon.points[0].z = 0;
+
+    // Add line obstacle
+    obstacleMsg.obstacles.push_back(costmap_converter::ObstacleMsg());
+    obstacleMsg.obstacles[1].id = 1;
+    geometry_msgs::Point32 lineStart, lineEnd;
+    lineStart.x = -2.5;
+    lineStart.y = 0.5;
+    lineEnd.x = -2.5;
+    lineEnd.y = 2;
+    obstacleMsg.obstacles[1].polygon.points.push_back(lineStart);
+    obstacleMsg.obstacles[1].polygon.points.push_back(lineEnd);
+
+    // Add polygon obstacle
+    obstacleMsg.obstacles.push_back(costmap_converter::ObstacleMsg());
+    obstacleMsg.obstacles[2].id = 2;
+    geometry_msgs::Point32 v1, v2, v3;
+    v1.x = -1;
+    v1.y = -1;
+    v2.x = -0.5;
+    v2.y = -1.5;
+    v3.x = 0;
+    v3.y = -1;
+    obstacleMsg.obstacles[2].polygon.points.push_back(v1);
+    obstacleMsg.obstacles[2].polygon.points.push_back(v2);
+    obstacleMsg.obstacles[2].polygon.points.push_back(v3);
+
+    ros::Rate r(10); // 10hz
+    double t = 0.0;
+    while (ros::ok()) {
+
+        // Vary y component of the point obstacle
+        obstacleMsg.obstacles[0].polygon.points[0].y = 1 * sin(t);
+        t = t + 0.1;
+
+        pub.publish(obstacleMsg);
+
+        ros::spinOnce();
+        r.sleep();
+    }
+}
+
+int main(int argc, char** argv) {
+    try {
+        publishObstacleMsg();
+    } catch (ros::ROSInterruptException& e) {
+        ROS_ERROR("ROS Interrupt Exception");
+    }
+
+    return 0;
+}
+
