@@ -11,13 +11,13 @@ TebLocalPlannerROS:
  follow_dt_hysteresis: 0.15
  max_samples: 500 #最大样本数
  global_plan_overwrite_orientation: True #覆盖全局路径中局部路径点的朝向
- allow_init_with_backwards_motion: False #允许在开始时想后退来执行轨迹
- max_global_plan_lookahead_dist: 3.0 #考虑优化的全局计划子集的最大长度
- global_plan_viapoint_sep: 0.0 #小于等于0.0禁用，大于0.0启用，从全局计划中提取的每两个连续通过点之间的最小间隔，值越小，局部路径越接近全局路径
+ allow_init_with_backwards_motion: True #允许在开始时想后退来执行轨迹 *
+ max_global_plan_lookahead_dist: 3.0 #考虑优化的全局计划子集的最大长度(局部路径长度),为0或负数,禁用,长度受本地costmap大小限制 *
+ global_plan_viapoint_sep: 0.0 #小于等于0.0禁用，大于0.0启用，从全局计划中提取的每两个连续通过点之间的最小间隔，值越小，局部路径越接近全局路径 *
  global_plan_prune_distance: 1
- exact_arc_length: False
- feasibility_check_no_poses: true #5
- publish_feedback: False
+ exact_arc_length: False #True,规划器在速度,加速度和转弯率计算中使用精确的弧长,增加CPU时间,否则使用欧几里得近似
+ feasibility_check_no_poses: 5 #规划出的路径,从机器人当前位姿,往前推n个点,检测机器人是否有碰撞
+ publish_feedback: False #是否发布包含信息的话题,内容包含速度角速度等等调试信息
  control_look_ahead_poses: 1    
     
  # Robot 
@@ -28,7 +28,9 @@ TebLocalPlannerROS:
  max_vel_theta: 1.5 #最大角速度
  acc_lim_x: 1 #最大线加速度
  acc_lim_theta: 2.0 #最大角加速度
+
  min_turning_radius: 0.0 # diff-drive robot (can turn on place!)最小旋转半径
+ #wheelbase: 0.0 #轴距
 
  footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
   type: "point"
@@ -55,8 +57,8 @@ TebLocalPlannerROS:
  costmap_obstacles_behind_robot_dist: 1.5 #考虑后面n米内的障碍物
  obstacle_poses_affected: 15 #为了保持距离，每个障碍物位置都与轨道上最近的位置相连
 
- dynamic_obstacle_inflation_dist: 0.6
- include_dynamic_obstacles: True
+ dynamic_obstacle_inflation_dist: 0.6 #动态障碍物的膨胀范围
+ include_dynamic_obstacles: True #是否将动态障碍物预测为速度模型
 
  costmap_converter_plugin: ""
  costmap_converter_spin_thread: True
@@ -64,32 +66,32 @@ TebLocalPlannerROS:
 
  # Optimization
     
- no_inner_iterations: 5
- no_outer_iterations: 4
- optimization_activate: True
- optimization_verbose: False
- penalty_epsilon: 0.1
+ no_inner_iterations: 5 #被外循环调用后内循环执行的优化次数(比较耗计算量) 总的优化次数 4*5
+ no_outer_iterations: 4 #执行的外循环的优化次数
+ optimization_activate: True #激活优化
+ optimization_verbose: False #打印优化过程详情
+ penalty_epsilon: 0.1 #对于硬约束近似，在惩罚函数中添加安全范围
  obstacle_cost_exponent: 4
  weight_max_vel_x: 2
  weight_max_vel_theta: 1
  weight_acc_lim_x: 1
  weight_acc_lim_theta: 1
- weight_kinematics_nh: 1000 #对非完整机器人的约束，值越小惩罚越小，对于完整约束机器人，会赋予Y轴速度
- weight_kinematics_forward_drive: 1 #值较大时，差速机器人不执行后退
- weight_kinematics_turning_radius: 1
- weight_optimaltime: 1 # must be > 0
- weight_shortest_path: 0
- weight_obstacle: 100
- weight_inflation: 0.2
- weight_dynamic_obstacle: 10
- weight_dynamic_obstacle_inflation: 0.2
- weight_viapoint: 1 #via point权重
+ weight_kinematics_nh: 1000 #对非完整机器人的约束，值越小惩罚越小，对于完整约束机器人，会赋予Y轴速度(是否允许横着走) *
+ weight_kinematics_forward_drive: 1 #值较大时，差速机器人不执行后退 *
+ weight_kinematics_turning_radius: 1 #优化过程中，车型机器人的最小转弯半径的权重
+ weight_optimaltime: 1 # must be > 0 #优化过程中，基于轨迹的时间上的权重(要最小时间还是最短路径)
+ weight_shortest_path: 0 #优化过程中，基于轨迹的路径上的权重
+ weight_obstacle: 100 #优化过程中，和障碍物最小距离的权重(较大的值,遇障时会比较保守,但会导致不够流畅)
+ weight_inflation: 0.2 #优化过程中， 膨胀区的权重
+ weight_dynamic_obstacle: 10 #优化过程中，和动态障碍物最小距离的权重
+ weight_dynamic_obstacle_inflation: 0.2 #优化过程中，和动态障碍物膨胀区的权重
+ weight_viapoint: 1 #优化过程中，和全局路径采样点距离的权重
  weight_adapt_factor: 2
 
  # Homotopy Class Planner
 
- enable_homotopy_class_planning: True
- enable_multithreading: True
+ enable_homotopy_class_planning: True #允许的线程数
+ enable_multithreading: True #允许多线程并行处理
  max_number_classes: 4
  selection_cost_hysteresis: 1.0
  selection_prefer_initial_plan: 0.9
@@ -111,9 +113,9 @@ TebLocalPlannerROS:
 
 # Recovery
  
- shrink_horizon_backup: True
+ shrink_horizon_backup: True #当规划器检测到系统异常，允许缩小时域规划范围
  shrink_horizon_min_duration: 10
- oscillation_recovery: True
+ oscillation_recovery: True #尝试检测和解决振荡
  oscillation_v_eps: 0.1
  oscillation_omega_eps: 0.1
  oscillation_recovery_min_duration: 10
