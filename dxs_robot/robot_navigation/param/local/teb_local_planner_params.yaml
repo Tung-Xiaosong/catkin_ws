@@ -14,7 +14,7 @@ TebLocalPlannerROS:
  allow_init_with_backwards_motion: True #允许在开始时想后退来执行轨迹 *
  max_global_plan_lookahead_dist: 3.0 #考虑优化的全局计划子集的最大长度(局部路径长度),为0或负数,禁用,长度受本地costmap大小限制 *
  global_plan_viapoint_sep: 0.0 #小于等于0.0禁用，大于0.0启用，从全局计划中提取的每两个连续通过点之间的最小间隔，值越小，局部路径越接近全局路径 *
- global_plan_prune_distance: 1
+ global_plan_prune_distance: 3 #1
  exact_arc_length: False #True,规划器在速度,加速度和转弯率计算中使用精确的弧长,增加CPU时间,否则使用欧几里得近似
  feasibility_check_no_poses: 5 #规划出的路径,从机器人当前位姿,往前推n个点,检测机器人是否有碰撞
  publish_feedback: False #是否发布包含信息的话题,内容包含速度角速度等等调试信息
