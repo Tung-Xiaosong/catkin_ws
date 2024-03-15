@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<robot name="mbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="$(find robot_description)/xacro/base/robot_base_gazebo.xacro" />
+    <xacro:include filename="$(find robot_description)/xacro/sensors/camera_gazebo.xacro" />
+    <!-- VLP-16 -->
+    <xacro:include filename="$(find robot_description)/xacro/sensors/VLP-16.urdf.xacro"/>
+    <xacro:include filename="$(find robot_description)/xacro/sensors/imu_gazebo.xacro"/><!--dxs add imu-->
+    
+    <xacro:mbot_base_gazebo robot_name=""/>
+    <xacro:usb_camera prefix="camera"/>
+
+
+    <!-- Velodyne lidar -->
+    <joint name="lidar_joint" type="fixed">                                                                                                                          #设置joint，注意z的值，设为机器人的高度
+        <origin xyz="0 0 0.1" rpy="0 0 0" />
+        <parent link="base_link"/>
+        <child link="velodyne_base_link"/>
+    </joint>
+
+    <!-- Camera -->
+    <joint name="camera_joint" type="fixed">
+        <origin xyz="0.2 0 0.04" rpy="0 0 0" />
+        <parent link="base_link"/>
+        <child link="camera_link"/>
+    </joint>
+    
+    <!--  dxs add imu llink   -->
+    <link name="imu_link">
+        <visual>
+        <geometry>
+            <box size="0.015 0.015 0.007"/>
+        </geometry>
+        </visual>
+    </link>
+    <joint name ="imu_joints" type="fixed">
+        <origin xyz="-0.20 0.0 0.05" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="imu_link"/>
+    </joint>
+
+    <xacro:VLP-16/><!--这一句必须要有！！！-->
+    <!--robot_base/-->
+
+</robot>
