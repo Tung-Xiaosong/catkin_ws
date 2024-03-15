@@ -1,0 +1,6 @@
+<launch>
+
+    <node pkg="cloud_undistortion" type="cloud_undistortion" name="cloud_undistortion_node">
+    </node>
+
+</launch>
