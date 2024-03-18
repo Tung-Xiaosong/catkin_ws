@@ -66,7 +66,7 @@ LidarUndistortion::LidarUndistortion() : private_node_("~")
         "corrected_scan", 1, this);//dxs add
 
     first_scan_ = true;
-    corrected_pointcloud_.reset(new PointCloudT());
+    corrected_pointcloud_.reset(new PointCloudT());//调用指针的reset函数
 
     // 参数进行初始化与重置
     ResetParameters();
@@ -102,7 +102,7 @@ void LidarUndistortion::ResetParameters()
 void LidarUndistortion::ImuCallback(const sensor_msgs::Imu::ConstPtr &imuMsg)
 {
     std::lock_guard<std::mutex> lock(imu_lock_);
-    imu_queue_.push_back(*imuMsg);
+    imu_queue_.push_back(*imuMsg);//获取imuMsg指针的对象
 }
 
 // odom的回调函数
@@ -167,7 +167,7 @@ bool LidarUndistortion::CacheLaserScan(const sensor_msgs::LaserScan::ConstPtr &l
 
     // 取出队列中的第一个数据
     current_laserscan_ = laser_queue_.front();
-    laser_queue_.pop_front();
+    laser_queue_.pop_front();//pop_front() 方法用于移除队列的第一个元素，如果队列不为空，则返回 void，否则不执行任何操作
 
     // 获取这帧雷达数据的起始，结束时间
     current_laserscan_header_ = current_laserscan_.header;

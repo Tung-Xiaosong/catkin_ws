@@ -81,7 +81,8 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "bit": "cpp",
-        "*.bak": "cpp"
+        "*.bak": "cpp",
+        "*.ipp": "cpp"
     },
     "ros.distro": "noetic"
 }
