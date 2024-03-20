@@ -1,0 +1,24 @@
+
+<launch>
+
+  <param name="/use_sim_time" value="true" />
+
+  <!-- ROS Node -->
+  <node name="efficient_online_segmentation" pkg="efficient_online_segmentation" 
+        type="efficient_online_segmentation_node" output="screen">
+    <rosparam command="load" 
+        file="$(find efficient_online_segmentation)/launch/segmentation_params.yaml"/>
+  </node>
+
+  <!-- ROS Rviz -->
+  <node name="rviz_EOS" pkg="rviz" type="rviz" required="true"
+    args="-d $(find efficient_online_segmentation)/launch/efficient_online_segmentation.rviz" />
+
+
+  <!-- 网络公开数据集|香港数据集32线 -->
+  <!-- <arg name="bag_filename" default="/home/dxs/velodyne.bag"/>  -->
+
+  <!-- ROS Bag Play -->
+  <!-- <node pkg="rosbag" type="play" name="rosbag_play" args="clock -s 100 -r 1.0 $(arg bag_filename)"/> -->
+
+</launch>

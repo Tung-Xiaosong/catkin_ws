@@ -16,22 +16,22 @@
 
 #include <lesson5/lidar_undistortion.h>
 
-geometry_msgs::Quaternion normalizeQuaternion(const geometry_msgs::Quaternion& quaternion)//dxs add
-{
-    double length = std::sqrt(
-        quaternion.w * quaternion.w +
-        quaternion.x * quaternion.x +
-        quaternion.y * quaternion.y +
-        quaternion.z * quaternion.z);
+// geometry_msgs::Quaternion normalizeQuaternion(const geometry_msgs::Quaternion& quaternion)//dxs add
+// {
+//     double length = std::sqrt(
+//         quaternion.w * quaternion.w +
+//         quaternion.x * quaternion.x +
+//         quaternion.y * quaternion.y +
+//         quaternion.z * quaternion.z);
 
-    geometry_msgs::Quaternion normalized_quaternion;
-    normalized_quaternion.w = quaternion.w / length;
-    normalized_quaternion.x = quaternion.x / length;
-    normalized_quaternion.y = quaternion.y / length;
-    normalized_quaternion.z = quaternion.z / length;
+//     geometry_msgs::Quaternion normalized_quaternion;
+//     normalized_quaternion.w = quaternion.w / length;
+//     normalized_quaternion.x = quaternion.x / length;
+//     normalized_quaternion.y = quaternion.y / length;
+//     normalized_quaternion.z = quaternion.z / length;
 
-    return normalized_quaternion;
-}
+//     return normalized_quaternion;
+// }
 
 // imu deque 的数据长度
 const int queueLength = 2000;
@@ -211,7 +211,7 @@ bool LidarUndistortion::PruneImuDeque()
     while (!imu_queue_.empty())
     {
         if (imu_queue_.front().header.stamp.toSec() < current_scan_time_start_ - 0.1)
-            imu_queue_.pop_front();
+            imu_queue_.pop_front();//移除队列中的第一个元素
         else
             break;
     }
@@ -325,7 +325,7 @@ bool LidarUndistortion::PruneOdomDeque()
     double roll, pitch, yaw;
 
 // 归一化四元数
-start_odom_msg_.pose.pose.orientation = normalizeQuaternion(start_odom_msg_.pose.pose.orientation);//dxs add
+// start_odom_msg_.pose.pose.orientation = normalizeQuaternion(start_odom_msg_.pose.pose.orientation);//dxs add
 
     // 获取起始odom消息的位移与旋转
     tf::quaternionMsgToTF(start_odom_msg_.pose.pose.orientation, orientation);
@@ -487,30 +487,30 @@ void LidarUndistortion::PublishCorrectedPointCloud()
     corrected_pointcloud_publisher_.publish(corrected_pointcloud_);
 
     // -----------------------------------------dxs add
-    sensor_msgs::LaserScan scan_msg;
-    scan_msg.header = current_laserscan_header_; // 使用雷达数据的消息头
+    // sensor_msgs::LaserScan scan_msg;
+    // scan_msg.header = current_laserscan_header_; // 使用雷达数据的消息头
 
-    // 填充激光雷达的参数
-    scan_msg.angle_min = -M_PI;
-    scan_msg.angle_max = M_PI;
-    scan_msg.angle_increment = 2 * M_PI / scan_count_;
-    scan_msg.time_increment = 0;  // 无效
-    scan_msg.scan_time = 0;  // 无效
-    scan_msg.range_min = 0.3;  // 最小测量距离
-    scan_msg.range_max = 50.0;  // 最大测量距离
+    // // 填充激光雷达的参数
+    // scan_msg.angle_min = -M_PI;
+    // scan_msg.angle_max = M_PI;
+    // scan_msg.angle_increment = 2 * M_PI / scan_count_;
+    // scan_msg.time_increment = 0;  // 无效
+    // scan_msg.scan_time = 0;  // 无效
+    // scan_msg.range_min = 0.3;  // 最小测量距离
+    // scan_msg.range_max = 50.0;  // 最大测量距离
 
-    // 填充扫描数据
-    scan_msg.ranges.resize(scan_count_);
-    for (int i = 0; i < scan_count_; ++i)
-    {   
+    // // 填充扫描数据
+    // scan_msg.ranges.resize(scan_count_);
+    // for (int i = 0; i < scan_count_; ++i)
+    // {   
 
-        double range = hypot(corrected_pointcloud_->points[i].x, corrected_pointcloud_->points[i].y);
-        scan_msg.ranges[i] = range;  // 
-        scan_msg.intensities[i] = 0.0;//dxs
-    }
+    //     double range = hypot(corrected_pointcloud_->points[i].x, corrected_pointcloud_->points[i].y);
+    //     scan_msg.ranges[i] = range;  // 
+    //     scan_msg.intensities[i] = 0.0;//dxs
+    // }
 
-    // 发布扫描数据
-    corrected_scan_publisher_.publish(scan_msg);
+    // // 发布扫描数据
+    // corrected_scan_publisher_.publish(scan_msg);
 }
 
 int main(int argc, char **argv)

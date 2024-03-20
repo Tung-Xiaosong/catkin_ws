@@ -1,4 +1,4 @@
 
 use_imu: false
-use_odometry: true
+use_odometry: false
 

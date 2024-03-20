@@ -82,7 +82,8 @@
         "variant": "cpp",
         "bit": "cpp",
         "*.bak": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "valarray": "cpp"
     },
     "ros.distro": "noetic"
 }
