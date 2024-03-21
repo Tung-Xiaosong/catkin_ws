@@ -16,8 +16,8 @@ int main() {
     // 连接到服务端
     struct sockaddr_in serv_addr;
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(8080);
-    if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0) {//
+    serv_addr.sin_port = htons(8888);
+    if(inet_pton(AF_INET, "192.168.1.102", &serv_addr.sin_addr)<=0) {//
         std::cerr << "Invalid address/ Address not supported\n";
         return 1;
     }
@@ -27,14 +27,13 @@ int main() {
         return 1;
     }
 
-    // 发送消息给服务端
-    const char *message = "c";
-    send(client_fd, message, strlen(message), 0);
-
-    // 接收服务端响应
-    char buffer[1024] = {0};
-    int valread = read(client_fd, buffer, 1024);
-    std::cout << "Received response: " << buffer << std::endl;
+    while (true)
+    {
+        char buffer[1024] = {0};
+        int valread = read(client_fd, buffer, 1024);
+        valread = read(client_fd, buffer, 1024);
+        std::cout << buffer << std::endl;
+    }
 
     // 关闭连接
     close(client_fd);

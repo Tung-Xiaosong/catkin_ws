@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="socket_pause_server" type="socket_pause_server_node" name="socket_pause_server_node" output="screen"/>
+
+</launch>

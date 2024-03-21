@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="socket_position_server" type="socket_position_server_node" name="socket_position_server_node" output="screen"/>
+
+</launch>
