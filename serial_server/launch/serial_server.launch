@@ -1,0 +1,5 @@
+<launch>
+
+	<node pkg="serial_server" name="serial_server_node" type="serial_server_node" output="screen" />
+
+</launch>
