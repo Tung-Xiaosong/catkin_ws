@@ -18,18 +18,8 @@
 
 std::mutex mtx; // 互斥锁，用于保护共享资源
 ros::Publisher pause_pub; // 暂停导航发布器
-ros::Subscriber cmd_vel_sub; // 订阅cmd_vel
-geometry_msgs::Twist nav_msg;
-yhs_msgs::ctrl_cmd ctrl_cmd_msg;
-//定义一个指针，将数据首地址强转为无符号型，sizeof字节长度发送首地址// 每一帧加入开始和校验位
 
-void cmd_vel_Cb(geometry_msgs::Twist cmd_vel_msg)
-{
-    nav_msg.linear.x = cmd_vel_msg.linear.x;
-    nav_msg.linear.y = cmd_vel_msg.linear.y;
-    nav_msg.angular.z = cmd_vel_msg.angular.z;
-    ROS_INFO("cmd_vel: x %f, z %f", nav_msg.linear.x, nav_msg.angular.z);
-}
+//定义一个指针，将数据首地址强转为无符号型，sizeof字节长度发送首地址// 每一帧加入开始和校验位
 
 // 发送机器人位置信息
 void sendPositionInfo(int serial_port) {
@@ -96,37 +86,39 @@ void sendPositionInfo(int serial_port) {
 }
 
 void pauseNavigation(int serial_port) {
-    while (ros::ok())
-    {
-        //std::lock_guard<std::mutex> lock(mtx); // 使用互斥锁保护临界区
-        int buf[256];
-        memset(buf, 0, sizeof(buf));
-        int bytes_read = read(serial_port, buf, sizeof(buf));
 
-        //ros::Rate loop_rate(100);
+while (ros::ok())
+{
 
-        if (bytes_read == -1) {
-            std::cerr << "Error reading from serial port" << std::endl;
-        }
+    int buf[256];
+    memset(buf, 0, sizeof(buf));
+    int bytes_read = read(serial_port, buf, sizeof(buf));
 
-        if(buf[0] == 0) // 暂停导航
-        {
-            ROS_INFO("pause navigation ...");
-            ctrl_cmd_msg.ctrl_cmd_gear = 3;
-            ctrl_cmd_msg.ctrl_cmd_linear = 0.0;
-            ctrl_cmd_msg.ctrl_cmd_angular = 0.0;
-            pause_pub.publish(ctrl_cmd_msg);// 清空buf[]
-        }
-        else if (buf[0] == 1)
-        {
-            ROS_INFO("resume navigation ...");
-            ctrl_cmd_msg.ctrl_cmd_gear = 3;
-            ctrl_cmd_msg.ctrl_cmd_linear = nav_msg.linear.x;
-            ctrl_cmd_msg.ctrl_cmd_angular = nav_msg.angular.z;
-            pause_pub.publish(ctrl_cmd_msg);
-        }
-        //std::this_thread::sleep_for(std::chrono::milliseconds(10)); // 每隔0.01秒发布一次
+    //ros::Rate loop_rate(100);
+
+    if (bytes_read == -1) {
+        std::cerr << "Error reading from serial port" << std::endl;
+
     }
+    while (ros::ok() && buf[0] == 0) { // 当buf[0]为0时，表示暂停导航
+        std::lock_guard<std::mutex> lock(mtx); // 使用互斥锁保护临界区
+        ROS_INFO("paused !!!");
+        yhs_msgs::ctrl_cmd cmd_msg;
+        cmd_msg.ctrl_cmd_gear = 01;
+        pause_pub.publish(cmd_msg);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10)); // 每隔0.01秒发布一次
+    }
+    while (ros::ok() && buf[0] == 1) { // 当buf[1]为1时，表示继续导航
+        std::lock_guard<std::mutex> lock(mtx); // 使用互斥锁保护临界区
+        ROS_INFO("navigating !!!");
+        yhs_msgs::ctrl_cmd cmd_msg;
+        cmd_msg.ctrl_cmd_gear = 03;
+        cmd_msg.ctrl_cmd_linear = 0.0;
+        cmd_msg.ctrl_cmd_angular = 0.1;
+        pause_pub.publish(cmd_msg);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10)); // 每隔0.01秒发布一次
+    }
+}
 }
 
 int main(int argc, char** argv) {
@@ -175,16 +167,14 @@ int main(int argc, char** argv) {
 
     // 暂停导航发布器
     pause_pub = nh.advertise<yhs_msgs::ctrl_cmd>("/ctrl_cmd", 1);
-    // 订阅/cmd_vel
-    cmd_vel_sub = nh.subscribe("cmd_vel", 10, cmd_vel_Cb);
 
     // 创建两个线程
     std::thread thread1(sendPositionInfo, serial_port);
-    std::thread thread2(pauseNavigation, serial_port);
+    //std::thread thread2(pauseNavigation, serial_port);
 
     // 等待两个线程结束
     thread1.join();
-    thread2.join();
+    //thread2.join();
 
     // 关闭串口
     close(serial_port);

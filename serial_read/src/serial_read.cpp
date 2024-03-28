@@ -5,7 +5,7 @@
 
 #include "CppLinuxSerial/SerialPort.hpp"
 
-#include </home/dxs/serial_read/include/serial_server.h>
+#include </home/dxs/catkin_ws/src/serial_read/include/serial_server.h>
 
 using namespace std::chrono_literals;
 using namespace mn::CppLinuxSerial;
@@ -44,15 +44,17 @@ int main()
 			}
 			
 			while( data_size >= sizeof(RobotPosition) )
-			{
+			{	
 				RobotPosition* data_ptr = reinterpret_cast<RobotPosition*>(p);
 				
-				if(data_ptr->head_1 == 0x55 && data_ptr->head_2 == 0xaa)
+				if(data_ptr->head_1 == 0x55 && data_ptr->head_2 == 0xAA)
 				{
+					// dxs add
+					std::cout << "size of struct: " << sizeof(RobotPosition) << "/" << data_size << std::endl;
 					std::cout << "Received Position X: " << data_ptr->position_x << std::endl;
 					std::cout << "Received Position Y: " << data_ptr->position_y << std::endl;
 					std::cout << "Received Position Yaw: " << data_ptr->position_yaw << std::endl;
-					
+					std::cout << "--------------------------------" << std::endl;
 					data_size -= sizeof(RobotPosition);
 					p += sizeof(RobotPosition);
 				}
